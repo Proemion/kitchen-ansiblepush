@@ -31,16 +31,13 @@ class PrintInventory
         if host_attr['mygroup']
           if host_attr['mygroup'].is_a?(Hash)
             host_attr['mygroup'].each do |group|
-              @groups[group] ||= []
-              @groups[group] << host
+              add_to_group(group, host)
             end
           elsif host_attr['mygroup'].is_a?(String)
-            @groups[host_attr['mygroup']] ||= []
-            @groups[host_attr['mygroup']] << host
+            add_to_group(host_attr['mygroup'], host)
           elsif host_attr['mygroup'].is_a?(Array)
             host_attr['mygroup'].each do |group|
-              @groups[group] ||= []
-              @groups[group] << host
+              add_to_group(group, host)
             end
           end
         end
@@ -50,8 +47,16 @@ class PrintInventory
       end
     end
 
-    @inventory = { 'all' => @all, '_meta' => { 'hostvars' => @hosts } }
+    @inventory = { 'all' => { 'hosts' => @all }, '_meta' => { 'hostvars' => @hosts } }
     @groups.merge(@inventory)
+  end
+
+  # Groups must be dicts ({ 'hosts' => [...] })
+  def add_to_group(group, host)
+    @groups[group] = { 'hosts' => @groups[group] } if @groups[group].is_a?(Array)
+    @groups[group] ||= { 'hosts' => [] }
+    @groups[group]['hosts'] ||= []
+    @groups[group]['hosts'] << host
   end
 
   def output_json

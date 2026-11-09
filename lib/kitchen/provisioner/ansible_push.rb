@@ -146,7 +146,7 @@ module Kitchen
         options << "--tags=#{as_list_argument(conf[:tags])}" if conf[:tags]
         options << "--skip-tags=#{as_list_argument(conf[:skip_tags])}" if conf[:skip_tags]
         options << "--start-at-task=#{conf[:start_at_task]}" if conf[:start_at_task]
-        options << "--inventory-file=#{conf[:generate_inv_path]}" if conf[:generate_inv]
+        options << "--inventory=#{conf[:generate_inv_path]}" if conf[:generate_inv]
         options << verbosity_argument.to_s if conf[:verbose]
         options << "--timeout=#{conf[:timeout]}" if conf[:timeout]
         options << "--force-handlers=#{conf[:force_handlers]}" if conf[:force_handlers]
